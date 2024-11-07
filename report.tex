@@ -1,0 +1,106 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{geometry}
+\geometry{
+ a4paper,
+ total={170mm,257mm},
+ left=20mm,
+ top=20mm,
+}
+\usepackage{titling}
+\usepackage{hyperref}
+\usepackage{graphicx}
+\usepackage{fancyhdr}
+\usepackage{cmbright}
+
+\title{SIRP}
+\date{2024}
+
+\fancypagestyle{plain}{% the preset of fancyhdr
+    \fancyhf{} % clear all header and footer fields
+    \fancyfoot[R]{\includegraphics[width=2cm]{KULEUVEN_GENT_RGB_LOGO.png}}
+    \fancyfoot[L]{\thedate}
+    \fancyhead[L]{Ecole 2600}
+    \fancyhead[R]{\href{https://github.com/MikeHorn-git/SIRP}{Github}}
+}
+
+\makeatletter
+\def\@maketitle{%
+  \newpage
+  \null
+  \vskip 1em%
+  \begin{center}%
+  \let \footnote \thanks
+    {\LARGE \@title \par}%
+    \vskip 1em%
+  \end{center}%
+  \par
+  \vskip 1em}
+\makeatother
+
+\begin{document}
+
+\maketitle
+
+\noindent\begin{tabular}{@{}ll}
+    Students & MikeHorn
+\end{tabular}
+
+\section*{Contexte}
+Ce \href{https://github.com/MikeHorn-git/SIRP}{projet} est construit via Docker et le rapport est écrit en LaTeX.
+
+\section{Configuration et Utilisation de TheHive et Cortex pour l'Analyse d'Incidents}
+
+\subsection{Déploiement Docker Compose}
+Le déploiement de TheHive et Cortex a été réalisé via Docker Compose (voir \texttt{download.png}). Ce fichier de configuration permet d’automatiser le téléchargement et le déploiement des containers nécessaires, réduisant les étapes manuelles et assurant un environnement homogène.
+
+\subsection{Création d’une Organisation et d’un Utilisateur dans TheHive et Cortex}
+Après le déploiement, une organisation et un utilisateur ont été créés dans Cortex (voir \texttt{cortex\_orga.png} et \texttt{cortex\_user.png}).
+\begin{itemize}
+    \item \textbf{Organisation} : Création pour centraliser la gestion des droits d’accès.
+    \item \textbf{Utilisateur} : Création d’un utilisateur dédié pour générer des clés API et accéder aux analyzers.
+\end{itemize}
+
+\subsection{Création d’une Clé API dans Cortex}
+L’utilisateur précédemment créé a reçu une clé API (voir \texttt{api\_keys.png}). Cette clé permet l’intégration de TheHive avec Cortex pour déclencher des analyzers.
+
+\subsection{Intégration de la Clé API dans TheHive}
+La clé API générée est intégrée dans TheHive, permettant à TheHive d’utiliser les analyzers de Cortex sur les observables liés aux incidents.
+
+\subsection{Activation des Analyzers CIRCLHashlookup et MaxMind}
+Les analyzers \textbf{CIRCLHashlookup} et \textbf{MaxMind} sont activés dans Cortex sans clé API spécifique (voir \texttt{cortex\_analyzer.png}). Cela permet d’enrichir les capacités d’analyse pour les hash et IP sans dépendre de services externes.
+
+\subsection{Sélection d'un Playbook d'Investigation : InterCERT}
+Le playbook InterCERT a été sélectionné pour structurer l'investigation, avec l'action \textbf{1.b : Évaluer les signaux forts sur son système d’information} (voir \texttt{playbook.png}). Cette action permet d’identifier et documenter les signes potentiels de compromission dans le SI.
+
+\subsection{Création d’un Cas dans TheHive}
+Un nouveau cas a été créé dans TheHive pour centraliser les informations et analyses sur un incident spécifique (voir \texttt{create\_case.png}).
+
+\subsection{Ajout d’Observables : Hash et IP Malveillants}
+Deux observables ont été ajoutés au cas :
+\begin{itemize}
+    \item \textbf{Hash malveillant} : Un fichier potentiellement malveillant.
+    \item \textbf{IP malveillante} : Une adresse IP suspecte identifiée via VirusTotal.
+\end{itemize}
+Ces observables serviront pour les analyses à l’aide des analyzers activés (voir \texttt{observables\_homepage.png}).
+
+\subsection{Lancement des Analyzers sur les IOCs}
+Les analyzers \textbf{CIRCLHashlookup} et \textbf{MaxMind} ont été lancés sur les observables pour obtenir des informations géographiques et de réputation sur les IOCs (voir \texttt{observables\_MaxMind\_GeoIP\_4\_0.png}).
+
+\section*{Conclusion}
+L'intégration de TheHive avec Cortex et la configuration des analyzers offrent un cadre efficace pour la détection et l’analyse des incidents de sécurité. Grâce à cette configuration, les équipes de sécurité peuvent rapidement identifier les menaces et prendre des mesures appropriées.
+
+\section*{Annexes : Screenshots}
+Les images suivantes sont jointes pour référence :
+\begin{itemize}
+    \item \texttt{download.png} : Déploiement Docker Compose.
+    \item \texttt{cortex\_orga.png}, \texttt{cortex\_user.png} : Création de l'organisation et de l'utilisateur dans Cortex.
+    \item \texttt{api\_keys.png} : Création de la clé API.
+    \item \texttt{cortex\_analyzer.png} : Activation des analyzers.
+    \item \texttt{playbook.png} : Sélection du playbook InterCERT.
+    \item \texttt{create\_case.png} : Création du cas dans TheHive.
+    \item \texttt{observables\_homepage.png} : Ajout des observables.
+    \item \texttt{observables\_MaxMind\_GeoIP\_4\_0.png} : Résultats de l'analyzer.
+\end{itemize}
+
+\end{document}
